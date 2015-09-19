@@ -18,7 +18,7 @@ activity.no.na <- activity[!is.na(activity$steps),]
 ```
 
 ## What is mean total number of steps taken per day?
-We start by computing the steps totals by day, and determining the mean and median. Then we convert the steps-per-day into a frequency distribution, and plot it as a histogram, along with a line indicating the mean.
+We start by computing the steps totals by day, and determining the mean and median. Then we plot the distribution of the daily totals as a histogram, along with a line indicating the mean.
 
 
 ```r
@@ -26,13 +26,8 @@ daily.totals <- tapply(activity.no.na$steps,activity.no.na$date,sum)
 daily.mean <- mean(daily.totals)
 daily.median <- median(daily.totals)
 
-dates <- as.Date(names(daily.totals))
-date_freq <- rep(dates, daily.totals)
-num_breaks <- as.integer(dates[length(dates)] - dates[1])
-
-hist(date_freq, num_breaks, freq=TRUE, xlab="Time", ylab="Number of Steps", main="Total Steps per Day")
-abline(h=daily.mean,col="red",lty=2)
-axis(4, at=daily.mean, "Mean", col="red")
+hist(daily.totals, xlab="Daily Steps", ylab="Number of Days", main="Daily Steps Distribution")
+abline(v=daily.mean,col="red",lty=2)
 ```
 
 ![plot of chunk steps_per_day](figure/steps_per_day-1.png) 
@@ -40,7 +35,7 @@ axis(4, at=daily.mean, "Mean", col="red")
 **Mean**: 10766.19  
 **Median**: 10765
 
-The mean and median are almost identical for this distribution. The histogram shows the daily variation; there are a few spikes in activity in mid to late November.
+The mean and median are almost identical for this distribution. The histogram shows that on a typical day, this person makes between 10,000 and 15,000 steps -- this range has by far the highest frequency. The red line on the histogram represents the mean.
 
 ## What is the average daily activity pattern?
 We compute the average number of steps for each interval across all days, then make a time-series plot of that data. Then we get the interval with the maximum number of steps, and add a line to the plot indicating this.
@@ -84,13 +79,8 @@ daily.totals2 <- tapply(activity2$steps,activity2$date,sum)
 daily.mean2 <- mean(daily.totals2)
 daily.median2 <- median(daily.totals2)
 
-dates2 <- as.Date(names(daily.totals2))
-date_freq2 <- rep(dates2, daily.totals2)
-num_breaks2 <- as.integer(dates2[length(dates2)] - dates2[1])
-
-hist(date_freq2, num_breaks2, freq=TRUE, xlab="Time", ylab="Number of Steps", main="Total Steps per Day")
-abline(h=daily.mean2, col="red", lty=2)
-axis(4, at=daily.mean2, "Mean", col="red")
+hist(daily.totals2, xlab="Daily Steps", ylab="Number of Days", main="Daily Steps Distribution")
+abline(v=daily.mean2, col="red", lty=2)
 ```
 
 ![plot of chunk analyze-imputed](figure/analyze-imputed-1.png) 
@@ -98,7 +88,7 @@ axis(4, at=daily.mean2, "Mean", col="red")
 **Mean**: 10766.19  
 **Median**: 10766.19
 
-The mean remains the same as before, and the median is now equal to the mean. This makes sense, because the NA values were for full days, so the total for each of those days would be equal to the daily mean. So this transformation has added data for these NA days, each of which has a daily total that's exactly equal to the mean that we computed. This addition does not alter the mean.
+The mean remains the same as before, and the median is now equal to the mean. This makes sense, because the NA values were for several full days (i.e. every interval in these days is NA). This means that the total steps for each of those days would be equal to the daily mean, given the nature of our transformation. Adding several values to a dataset that are exactly equal to that dataset's mean will not alter the mean.
 
 ## Are there differences in activity patterns between weekdays and weekends?
 
